@@ -11,21 +11,22 @@ An Express.js module providing the ability to upload multiple images to S3 using
 * An [Amazon S3](http://aws.amazon.com/s3/) bucket, for storing the images
 * Node.js and NPM properly installed
 
-### Module Integration
+## Module Integration
 
 See the [amazon-s3-multi-uploader-example](https://github.com/taeram/amazon-s3-multi-uploader-example) repository
-for a working implementation of the module.
+for a working implementation of the module, and how you might approach integrating it into your own
+express.js application.
 
-## Setup
+## Module Setup
 
-### Heroku Setup
+Add the following config variables to your Heroku application:
+
 ```bash
 heroku config:set AWS_ACCESS_KEY_ID=secret \
                   AWS_SECRET_ACCESS_KEY=secret \
                   S3_BUCKET_NAME=foo-bar-baz
 ```
 
-### Amazon S3 Setup
 Add this CORS policy to your S3 bucket
 
 ```xml
