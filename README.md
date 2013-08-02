@@ -11,10 +11,10 @@ An Express.js module providing the ability to upload multiple images to S3 using
 * An [Amazon S3](http://aws.amazon.com/s3/) bucket, for storing the images
 * Node.js and NPM properly installed
 
-### Application Setup
+### Module Integration
 
 See the [amazon-s3-multi-uploader-example](https://github.com/taeram/amazon-s3-multi-uploader-example) repository
-for a working implementation.
+for a working implementation of the module.
 
 ## Setup
 
