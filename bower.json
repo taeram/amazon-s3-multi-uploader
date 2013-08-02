@@ -1,0 +1,12 @@
+{
+  "name": "amazon-s3-multi-uploader",
+  "dependencies": {
+    "angular": "https://github.com/angular/bower-angular.git#1.*",
+    "bootstrap": "3.*",
+    "font-awesome": "3.*",
+    "jquery": "2.*",
+    "jquery-serialize-object": "1.0.0",
+    "phpjs": "https://github.com/kvz/phpjs.git",
+    "underscore": "*"
+  }
+}

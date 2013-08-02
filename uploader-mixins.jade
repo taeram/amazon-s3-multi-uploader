@@ -1,0 +1,70 @@
+mixin uploader-block-head
+    link(href="/components/bootstrap/dist/css/bootstrap.min.css", rel="stylesheet", media="screen")
+    link(href="/components/font-awesome/css/font-awesome.min.css", rel="stylesheet", media="screen")
+    link(href="/components/amazon-s3-multi-uploader/uploader.css", rel="stylesheet", media="screen")
+
+mixin uploader-block-content
+    div(ng-app="uploaderApp", ng-cloak)
+        div(ng-controller="UploaderCtrl", class="uploader")
+            form(action="https://#{s3Bucket}.s3.amazonaws.com/", method="POST", enctype="multipart/form-data", class="form-upload")
+                input(type="hidden", name="key", value="#{s3Folder}${filename}")
+                input(type="hidden", name="AWSAccessKeyId", value="#{awsAccessKeyId}")
+                input(type="hidden", name="acl", value="#{s3Acl}")
+                input(type="hidden", name="policy", value="#{s3Policy}")
+                input(type="hidden", name="signature", value="#{s3Signature}")
+                input(type="hidden", name="success_action_status", value="#{s3SuccessActionStatus}")
+
+                div(class="btn btn-success", ng-disabled="getFilesToUpload() > 0 && getUploadProgress() > 0")
+                    input(type="file", name="file", class="input-file", file-change="addFiles")
+                    i(class="icon-plus")
+                    | Add files...
+                button(type="submit", class="btn btn-primary", ng-click="uploadFiles($event)", ng-disabled="getFilesToUpload() == 0 || getUploadProgress() > 0")
+                    i(class="icon-upload")
+                    | Start upload
+                button(type="reset", class="btn btn-warning", ng-click="clearFiles()")
+                    i(class="icon-ban-circle")
+                    | Cancel upload
+
+                table(class="table table-striped", ng-hide="files.length == 0", ng-cloak)
+                    colgroup
+                        col
+                        col(style="width: 50%")
+                        col(style="width: 150px")
+                        col(style="width: 6px")
+                    caption
+                        {{getFilesToUpload()}} Files in the Queue
+                        div(ng-hide="getUploadProgress() == 0")
+                            div(class="progress progress-striped", ng-class="{'active': getFilesToUpload() > 0}")
+                                div(class="progress-bar", style="width: {{getUploadProgress()}}%", ng-class="{'progress-bar-success': getFilesToUpload() == 0}")
+                    thead
+                        th Name
+                        th Upload Progress
+                        th Size (bytes)
+                        th &nbsp;
+                    tbody
+                        tr(ng-repeat="file in files")
+                            td
+                                div(ng-hide="file.url || file.imgUrl")
+                                    {{file.name}}
+                                div
+                                    div(ng-hide="!file.imgUrl")
+                                        img(src="{{file.imgUrl}}", class="img-thumbnail")
+                                    span(ng-hide="!file.url")
+                                        a(href="{{file.url}}") {{file.name}}
+                            td
+                                div(class="progress progress-striped")
+                                    div(class="progress-bar", style="width: {{file.progress}}%", ng-class="{'progress-bar-info': !file.isUploaded, 'progress-bar-success': file.isUploaded}")
+                            td {{file.sizeFormatted}}
+                            td
+                                button(class="btn btn-icon btn-danger", ng-click="removeFile(file)")
+                                    i(class="icon-trash")
+
+mixin uploader-block-script
+    script(src="/components/jquery/jquery.min.js")
+    script(src="/components/bootstrap/dist/js/bootstrap.min.js")
+    script(src="/components/jquery-serialize-object/jquery.serialize-object.compiled.js")
+    script(src="/components/phpjs/functions/strings/number_format.js")
+    script(src="/components/phpjs/functions/filesystem/dirname.js")
+    script(src="/components/underscore/underscore.js")
+    script(src="/components/angular/angular.min.js")
+    script(src="/components/amazon-s3-multi-uploader/uploader-angular-app.js")
