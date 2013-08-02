@@ -230,8 +230,16 @@ Uploader.prototype.send = function () {
      * @param Event e The event
      */
     var uploadComplete = function(e) {
+        // Extract the path to the file
+        var imagePath = $(e.target.responseXML).find('Key').text();
+        var folder;
+        if (imagePath.match(/\//)) {
+            folder = dirname(imagePath);
+        } else {
+            folder = '';
+        }
+
         var url = $(e.target.responseXML).find('Location').text();
-        var folder = dirname($(e.target.responseXML).find('Key').text());
 
         $this.$scope.$apply(function() {
             $this.file.isUploaded = true;
