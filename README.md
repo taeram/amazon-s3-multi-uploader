@@ -1,6 +1,6 @@
 # Amazon S3 Multi Uploader
 
-An Express.js module providing the ability to upload multiple images to S3 using a simple, extensible interface.
+An Express.js "module" providing the ability to upload multiple images to S3 using a simple, extensible interface.
 
 ![amazon-s3-multi-uploader](http://taeram.github.io/media/amazon-s3-multi-uploader-screenshot.png)
 
@@ -14,7 +14,7 @@ An Express.js module providing the ability to upload multiple images to S3 using
 ## Module Integration
 
 See the [amazon-s3-multi-uploader-example](https://github.com/taeram/amazon-s3-multi-uploader-example) repository
-for a working implementation of the module, and how you might approach integrating it into your own
+for a working implementation of the "module", and how you might approach integrating it into your own
 express.js application.
 
 ## Module Setup
