@@ -58,6 +58,10 @@ angular.module('uploaderApp.controllers', [])
     $scope.getBytesTotal = function () {
         var bytesTotal = 0;
         for (var i=0; i < $scope.files.length; i++) {
+            if ($scope.files[i].isTooBig) {
+                continue;
+            }
+
             bytesTotal += $scope.files[i].size;
         }
 
@@ -99,7 +103,7 @@ angular.module('uploaderApp.controllers', [])
      */
     $scope.getFilesToUpload = function () {
         return _.filter($scope.files, function (file) {
-            return !file.isUploaded && !file.isUploadError;
+            return !file.isUploaded && !file.isUploadError && !file.isTooBig;
         }).length;
     };
 
