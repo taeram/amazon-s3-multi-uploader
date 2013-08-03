@@ -3,7 +3,8 @@
  */
 exports.index = function(req, res){
     var crypto = require("crypto"),
-        mime = require("mime-magic");
+        mime = require("mime-magic"),
+        _ = require("underscore");
 
     var folder;
     if (typeof(req.params.folder) == "undefined") {
@@ -28,18 +29,24 @@ exports.index = function(req, res){
     var policy = new Buffer( JSON.stringify( s3Policy ) ).toString( 'base64' );
     var signature = crypto.createHmac( "sha1", process.env.AWS_SECRET_ACCESS_KEY ).update( policy ).digest( "base64" );
 
-    res.render('uploader', {
-        awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        s3Acl: s3Acl,
-        s3Bucket: process.env.S3_BUCKET_NAME,
-        s3Folder: folder,
-        s3Policy: policy,
-        s3Signature: signature,
-        s3SuccessActionStatus: s3SuccessActionStatus,
-        maxUploadSize: process.env.MAX_UPLOAD_SIZE
-    });
+    res.render('uploader', _.extend({
+            awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            s3Acl: s3Acl,
+            s3Bucket: process.env.S3_BUCKET_NAME,
+            s3Folder: folder,
+            s3Policy: policy,
+            s3Signature: signature,
+            s3SuccessActionStatus: s3SuccessActionStatus,
+            maxUploadSize: process.env.MAX_UPLOAD_SIZE
+        }, module.exports.locals)
+    );
 };
 
 module.exports = {
+    // Template parameters, to be overridden
+    locals: {
+        title: "Upload!"
+    },
+
     index: exports.index
 };
