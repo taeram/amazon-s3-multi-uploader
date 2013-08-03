@@ -42,3 +42,19 @@ Add this CORS policy to your S3 bucket
     </CORSRule>
 </CORSConfiguration>
 ```
+
+### Post-Upload Callbacks
+
+In your code, you can hook into the post-upload callback by defining your own
+angular module in your project's JavaScript:
+
+```js
+/* Services */
+angular.module('uploaderApp.services', []).
+    factory('notify', ['$window', function($window) {
+        return function($scope, file) {
+            console.log("Upload completed", file);
+        }
+    }
+]);
+```
