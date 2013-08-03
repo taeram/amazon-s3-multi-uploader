@@ -27,18 +27,23 @@ heroku config:set AWS_ACCESS_KEY_ID=secret \
                   S3_BUCKET_NAME=foo-bar-baz
 ```
 
-Add this CORS policy to your S3 bucket
+Add this CORS policy to your S3 bucket, making sure to replace `http://YOUR_WEBSITE`
+with the url where the uploader will be hosted.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
     <CORSRule>
-        <AllowedOrigin>*</AllowedOrigin>
+        <AllowedOrigin>http://YOUR_WEBSITE/</AllowedOrigin>
         <AllowedMethod>GET</AllowedMethod>
         <AllowedMethod>POST</AllowedMethod>
         <AllowedMethod>PUT</AllowedMethod>
         <AllowedMethod>HEAD</AllowedMethod>
         <AllowedHeader>*</AllowedHeader>
+    </CORSRule>
+    <CORSRule>
+        <AllowedOrigin>*</AllowedOrigin>
+        <AllowedMethod>GET</AllowedMethod>
     </CORSRule>
 </CORSConfiguration>
 ```
