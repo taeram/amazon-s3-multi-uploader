@@ -21,10 +21,16 @@ express.js application.
 
 Add the following config variables to your Heroku application:
 
+* `AWS_ACCESS_KEY_ID` - Your Amazon AWS Access Key
+* `AWS_SECRETACCESS_KEY` - Your Amazon AWS Secret Key
+* `S3_BUCKET_NAME` - The Amazon S3 bucket to store the uploaded files
+* `MAX_UPLOAD_SIZE` - The maximum file size, in bytes
+
 ```bash
 heroku config:set AWS_ACCESS_KEY_ID=secret \
                   AWS_SECRET_ACCESS_KEY=secret \
-                  S3_BUCKET_NAME=foo-bar-baz
+                  S3_BUCKET_NAME=foo-bar-baz \
+                  MAX_UPLOAD_SIZE=5242880
 ```
 
 Add this CORS policy to your S3 bucket, making sure to replace `http://YOUR_WEBSITE`

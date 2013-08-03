@@ -21,7 +21,7 @@ exports.index = function(req, res){
             ["starts-with", "$key", folder],
             {"acl": s3Acl},
             {"success_action_status": s3SuccessActionStatus},
-            ["content-length-range", 0, 20971520]
+            ["content-length-range", 0, parseInt(process.env.MAX_UPLOAD_SIZE, 10)]
         ]
     };
 
@@ -35,7 +35,8 @@ exports.index = function(req, res){
         s3Folder: folder,
         s3Policy: policy,
         s3Signature: signature,
-        s3SuccessActionStatus: s3SuccessActionStatus
+        s3SuccessActionStatus: s3SuccessActionStatus,
+        maxUploadSize: process.env.MAX_UPLOAD_SIZE
     });
 };
 

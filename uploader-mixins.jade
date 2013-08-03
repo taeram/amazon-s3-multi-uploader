@@ -53,8 +53,11 @@ mixin uploader-block-content
                                         a(href="{{file.url}}") {{file.name}}
                             td
                                 div(class="progress progress-striped")
-                                    div(class="progress-bar", style="width: {{file.progress}}%", ng-class="{'progress-bar-info': !file.isUploaded, 'progress-bar-success': file.isUploaded}")
-                            td {{file.sizeFormatted}}
+                                    div(class="progress-bar", style="width: {{file.progress}}%", ng-class="{'progress-bar-info': !file.isUploaded && !file.isUploadError, 'progress-bar-success': file.isUploaded && !file.isUploadError, 'progress-bar-danger': file.isUploadError}")
+                            td
+                                div(ng-hide="file.isTooBig") {{file.sizeFormatted}}
+                                div(ng-hide="!file.isTooBig")
+                                    span(class="text-danger", data-toggle="tooltip") File too large
                             td
                                 button(class="btn btn-icon btn-danger", ng-click="removeFile(file)")
                                     i(class="icon-trash")
@@ -68,3 +71,6 @@ mixin uploader-block-script
     script(src="/components/underscore/underscore.js")
     script(src="/components/angular/angular.min.js")
     script(src="/components/amazon-s3-multi-uploader/uploader-angular-app.js")
+    script.
+        Config = {};
+        Config.maxUploadSize = #{maxUploadSize};

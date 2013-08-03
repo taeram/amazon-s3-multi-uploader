@@ -99,7 +99,7 @@ angular.module('uploaderApp.controllers', [])
      */
     $scope.getFilesToUpload = function () {
         return _.filter($scope.files, function (file) {
-            return !file.isUploaded;
+            return !file.isUploaded && !file.isUploadError;
         }).length;
     };
 
@@ -118,10 +118,16 @@ angular.module('uploaderApp.controllers', [])
             // Add the files to the list
             for (var i=0; i < element.files.length; i++) {
                 var file = element.files[i];
+                if (file.size > Config.maxUploadSize) {
+                    file.isTooBig = true;
+                } else {
+                    file.isTooBig = false;
+                }
                 file.sizeFormatted = number_format(file.size);
                 file.progress = 0;
                 file.url = null;
                 file.isUploaded = false;
+                file.isUploadError = false;
 
                 $scope.files.push(file);
             }
@@ -175,10 +181,17 @@ angular.module('uploaderApp.controllers', [])
             var file = $scope.files[i];
 
             // Don't upload the same file twice
-            if (file.isUploaded == false) {
-                var u = new Uploader($scope, $uploadCompleteCallback, file, formObject, formUrl, formMethod);
-                u.send();
+            if (file.isUploaded === true) {
+                continue;
             }
+
+            // Don't upload files which exceed the max upload size
+            if (file.isTooBig === true) {
+                continue;
+            }
+
+            var u = new Uploader($scope, $uploadCompleteCallback, file, formObject, formUrl, formMethod);
+            u.send();
         }
     };
 }]);
@@ -230,26 +243,31 @@ Uploader.prototype.send = function () {
      * @param Event e The event
      */
     var uploadComplete = function(e) {
-        // Extract the path to the file
-        var imagePath = $(e.target.responseXML).find('Key').text();
-        var folder;
-        if (imagePath.match(/\//)) {
-            folder = dirname(imagePath);
+        if (e.target.status == 201) {
+            // Extract the path to the file
+            var imagePath = $(e.target.responseXML).find('Key').text();
+            var folder;
+            if (imagePath.match(/\//)) {
+                folder = dirname(imagePath);
+            } else {
+                folder = '';
+            }
+
+            var url = $(e.target.responseXML).find('Location').text();
+
+            $this.$scope.$apply(function() {
+                $this.file.isUploaded = true;
+                $this.file.url = url;
+                $this.file.folder = folder;
+
+                // Trigger the upload complete callback
+                $this.$uploadCompleteCallback($this.$scope, $this.file);
+            });
         } else {
-            folder = '';
+            $this.$scope.$apply(function() {
+                $this.file.isUploadError = true;
+            });
         }
-
-        var url = $(e.target.responseXML).find('Location').text();
-
-        $this.$scope.$apply(function() {
-            $this.file.isUploaded = true;
-            $this.file.url = url;
-            $this.file.folder = folder;
-
-            // Trigger the upload complete callback
-            $this.$uploadCompleteCallback($this.$scope, $this.file);
-        });
-
     };
     xhr.addEventListener("load", uploadComplete, false);
 
