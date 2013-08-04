@@ -48,7 +48,7 @@ mixin uploader-block-content
                                     {{file.name}}
                                 div
                                     div(ng-hide="!file.imgUrl")
-                                        img(src="{{file.imgUrl}}", class="img-thumbnail")
+                                        img(ng-src="{{file.imgUrl}}", class="img-thumbnail")
                                     span(ng-hide="!file.url")
                                         a(href="{{file.url}}") {{file.name}}
                             td
