@@ -69,3 +69,7 @@ angular.module('uploaderApp.services', []).
     }
 ]);
 ```
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/taeram/amazon-s3-multi-uploader/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
